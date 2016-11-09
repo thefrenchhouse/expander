@@ -16,5 +16,6 @@ When a song is "saved", Expander will create you some playlists based on song's 
   - https://developer.spotify.com/web-api/console/get-current-user-saved-tracks/
 * Categorize songs (manual?)
   - https://developer.spotify.com/web-api/get-audio-features/
+  - https://developer.spotify.com/web-api/get-audio-analysis/
 * List all Artist / Album / Year, fetch 3 songs by artist
 * Create a mix playlist by week by music genre
