@@ -44,5 +44,8 @@
       "src/**/*.{ts,tsx,js,jsx}",
       "!src/**/*.d.ts"
     ]
+  },
+  "dependencies": {
+    "spotify-web-api-node": "^2.3.6"
   }
 }
