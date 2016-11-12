@@ -1,3 +1,5 @@
+import { SpotifySync } from './spotifySync'
+
 var SpotifyWebApi = require('spotify-web-api-node'),
     config        = require('../../application-config.json');
 
@@ -10,12 +12,8 @@ var spotifyApi = new SpotifyWebApi({
 
 spotifyApi.setAccessToken(config.SpotifyAccessToken);
 
-spotifyApi.getMySavedTracks({
-  limit : 2,
-  offset: 1
-})
-.then(function(data) {
-  console.log('Done!', data);
-}, function(err) {
-  console.log('Something went wrong!', err);
-});
+
+let spotifySync = new SpotifySync(spotifyApi);
+spotifySync.fetch(true).then((songsList) => {
+  console.dir(songsList);
+}, (error) =>  { console.error(error) });

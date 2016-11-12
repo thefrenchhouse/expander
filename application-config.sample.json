@@ -2,5 +2,7 @@
   "SpotifyClientId" : "",
   "SpotifyClientSecret" : "",
   "SpotifyRedirectUri" : "",
-  "SpotifyAccessToken" : ""
+  "SpotifyAccessToken" : "",
+  "RedisHost": "",
+  "RedisPort": ""
 }
