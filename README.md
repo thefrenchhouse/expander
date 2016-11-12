@@ -19,3 +19,8 @@ When a song is "saved", Expander will create you some playlists based on song's 
   - https://developer.spotify.com/web-api/get-audio-analysis/
 * List all Artist / Album / Year, fetch 3 songs by artist
 * Create a mix playlist by week by music genre
+
+
+## Technical
+
+- using https://github.com/thelinmichael/spotify-web-api-node
