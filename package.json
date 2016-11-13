@@ -8,8 +8,10 @@
   },
   "devDependencies": {
     "@types/es6-shim": "^0.31.32",
+    "@types/immutable": "^3.8.4",
     "@types/jest": "~15.1.32",
     "@types/node": "~6.0.46",
+    "immutable": "^3.8.1",
     "jest": "~17.0.0",
     "rimraf": "~2.5.4",
     "tslint": "~3.15.1",

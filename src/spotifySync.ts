@@ -1,3 +1,6 @@
+import * as Immutable from 'immutable';
+import { SpotifySongPresenter } from './presenters/SpotifySongPresenter'
+
 export class SpotifySync {
     private spotifyApi: any;
     private redisClient: any;
@@ -12,7 +15,7 @@ export class SpotifySync {
     //  - fetch all saved tracks since last sync
     // 
     // (Note: if `reset` is false, fetch all user saved tracks
-    fetch(reset = false): Promise<Array<any>> {
+    fetch(reset = false): Promise<Immutable.List<any>> {
       if (!reset) {
         return new Promise((resolve, reject) =>  {
           this.fetchSpotifyUserId().then((userId) => {
@@ -26,6 +29,10 @@ export class SpotifySync {
       }
     }
 
+    ///////////////////
+    // Private methods
+    ///////////////////
+
     private fetchSpotifyUserId(): Promise<String> {
       return new Promise((resolve, reject) => {
         this.spotifyApi.getMe().then( (data) => {
@@ -34,7 +41,7 @@ export class SpotifySync {
       });
     }
 
-    private fetchSpotifyUserSavedSongs(since = null): Promise<Array<any>> {
+    private fetchSpotifyUserSavedSongs(since = null): Promise<Immutable.List<any>> {
       const limit: number = 50;
       return new Promise((resolve, reject) => {
         this.spotifyApi.getMySavedTracks({
@@ -44,11 +51,11 @@ export class SpotifySync {
           .then(function(data) {
             if (since) {
               // TODO: filter songs by added_time
-              resolve(data.body.items.map((item) => { return item.track.name; }));
+              resolve(SpotifySongPresenter.fromCollection(data.body.items));
             } else {
-              resolve(data.body.items.map((item) => { return item.track.name; }));
+              resolve(SpotifySongPresenter.fromCollection(data.body.items));
             }
-          }, reject);
+          }, reject).catch(reject);
       });
     }
 
