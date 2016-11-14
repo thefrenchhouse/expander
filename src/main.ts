@@ -1,30 +1,14 @@
 import * as Immutable from 'immutable';
-import { SpotifySync } from './spotifySync'
-import { ArtistTopTrack } from './ArtistTopTrack'
+import { ArtistsTopTrack } from './ArtistsTopTrack'
+import { Bootstraper } from './spotify/Bootstraper'
 
-// old import for modules without tsd
-var SpotifyWebApi = require('spotify-web-api-node'),
-    config        = require('../../application-config.json');
-
-// credentials are optional
-var spotifyApi = new SpotifyWebApi({
-  clientId : config.SpotifyClientId,
-  clientSecret : config.SpotifyClientSecret,
-  redirectUri : config.SpotifyRedirectUri
+// Fetch user last saved songs and 
+//  create one playlist by Artist (top tracks)
+Bootstraper.boot().then( (spotifyApiContext) => {
+  ArtistsTopTrack.execute(spotifyApiContext).
+    then( (status) => {
+      console.log('status : ', status);
+    }, (error) => {
+      console.error('error : ', error);
+    })
 });
-
-spotifyApi.setAccessToken(config.SpotifyAccessToken);
-
-
-let spotifySync = new SpotifySync(spotifyApi);
-spotifySync.fetch().then((songsList) => {
-  ArtistTopTrack.fromTracks(
-    spotifyApi,
-    spotifySync.userId,
-    songsList.map((songItem: any, key: Number) => {
-      return songItem.artistId as String;
-    }).toSet()
-  ).then((result) => {
-    console.log('done !');
-  }, (error) =>  { console.error(error) });
-}, (error) =>  { console.error(error) });
