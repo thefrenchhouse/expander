@@ -2,31 +2,23 @@ import * as Immutable from 'immutable';
 import { SpotifySongPresenter } from './presenters/SpotifySongPresenter'
 
 export class SpotifySync {
-    private spotifyApi: any;
+    public  userId: String;
     private redisClient: any;
 
-    constructor(spotifyApi: any) {
-      this.spotifyApi = spotifyApi;
-    }
+    constructor(private spotifyApi: any) { }
 
     // Given a api instance:
     //  - fetch current user id
     //  - fetch last sync date from redis
     //  - fetch all saved tracks since last sync
-    // 
-    // (Note: if `reset` is false, fetch all user saved tracks
-    fetch(reset = false): Promise<Immutable.List<any>> {
-      if (!reset) {
-        return new Promise((resolve, reject) =>  {
-          this.fetchSpotifyUserId().then((userId) => {
-            this.fetchSpotifyUserSavedSongs(
-              this.fetchLastSyncDate(userId)
-            ).then(resolve, reject);
-          }, reject)
-        });
-      } else {
-        return this.fetchSpotifyUserSavedSongs();
-      }
+    fetch(): Promise<Immutable.List<any>> {
+      return new Promise((resolve, reject) =>  {
+        this.fetchSpotifyUserId().then((userId) => {
+          this.fetchSpotifyUserSavedSongs(
+            this.fetchLastSyncDate(userId)
+          ).then(resolve, reject);
+        }, reject)
+      });
     }
 
     ///////////////////
@@ -36,13 +28,15 @@ export class SpotifySync {
     private fetchSpotifyUserId(): Promise<String> {
       return new Promise((resolve, reject) => {
         this.spotifyApi.getMe().then( (data) => {
+          console.log(data.body.id);
+          this.userId = data.body.id;
           resolve(data.body.id);
         }, reject);
       });
     }
 
     private fetchSpotifyUserSavedSongs(since = null): Promise<Immutable.List<any>> {
-      const limit: number = 50;
+      const limit: number = 5;
       return new Promise((resolve, reject) => {
         this.spotifyApi.getMySavedTracks({
             limit : limit//,
@@ -51,9 +45,17 @@ export class SpotifySync {
           .then(function(data) {
             if (since) {
               // TODO: filter songs by added_time
-              resolve(SpotifySongPresenter.fromCollection(data.body.items));
+              resolve(
+                SpotifySongPresenter.fromCollection(
+                  data.body.items.map((item) => { return item.track; })
+                )
+              );
             } else {
-              resolve(SpotifySongPresenter.fromCollection(data.body.items));
+              resolve(
+                SpotifySongPresenter.fromCollection(
+                  data.body.items.map((item) => { return item.track; })
+                )
+              );
             }
           }, reject).catch(reject);
       });

@@ -1,4 +1,6 @@
+import * as Immutable from 'immutable';
 import { SpotifySync } from './spotifySync'
+import { PlaylistCreator } from './PlaylistCreator'
 
 // old import for modules without tsd
 var SpotifyWebApi = require('spotify-web-api-node'),
@@ -15,11 +17,17 @@ spotifyApi.setAccessToken(config.SpotifyAccessToken);
 
 
 let spotifySync = new SpotifySync(spotifyApi);
-spotifySync.fetch(true).then((songsList) => {
-  console.log(JSON.stringify(songsList))
-  // PlaylistCreator.forEachArtist(
-  //  Utils.groupByArtist(songsList)
-  // )
+spotifySync.fetch().then((songsList) => {
+  console.log('spotifySync.userId', spotifySync.userId);
+  PlaylistCreator.forEachArtist(
+    spotifyApi,
+    spotifySync.userId,
+    songsList.map((songItem: any, key: Number) => {
+      return songItem.artistId as String;
+    }).toSet()
+  ).then((result) => {
+    console.log('done !');
+  }, (error) =>  { console.error(error) });
 }, (error) =>  { console.error(error) });
 
 

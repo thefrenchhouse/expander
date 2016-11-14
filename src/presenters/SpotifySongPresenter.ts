@@ -11,9 +11,9 @@ export class SpotifySongPresenter {
 
   static present(item): Object {
     return {
-      id: item.track.id,
-      name: item.track.name,
-      authorId: item.track.artists[0].id
+      id: item.uri,
+      name: item.name,
+      artistId: item.artists[0].id
     };
   }
 
