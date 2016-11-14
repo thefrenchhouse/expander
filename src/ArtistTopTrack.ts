@@ -1,11 +1,11 @@
 import * as Immutable from 'immutable';
 import { SpotifySongPresenter } from './presenters/SpotifySongPresenter'
 
-export class PlaylistCreator {
+export class ArtistTopTrack {
 
-  static forEachArtist(spotifyApi: any, userId: String, artists: Immutable.Set<String>): Promise<any> {
+  static fromTracks(spotifyApi: any, userId: String, artists: Immutable.Set<String>): Promise<any> {
     let promises = artists.map( (artistId) => {
-      let creator = new PlaylistCreator(spotifyApi, userId, artistId);
+      let creator = new ArtistTopTrack(spotifyApi, userId, artistId);
       return creator.execute();
     });
     return Promise.all(promises.toArray());

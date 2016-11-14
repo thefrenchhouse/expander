@@ -1,6 +1,6 @@
 import * as Immutable from 'immutable';
 import { SpotifySync } from './spotifySync'
-import { PlaylistCreator } from './PlaylistCreator'
+import { ArtistTopTrack } from './ArtistTopTrack'
 
 // old import for modules without tsd
 var SpotifyWebApi = require('spotify-web-api-node'),
@@ -18,8 +18,7 @@ spotifyApi.setAccessToken(config.SpotifyAccessToken);
 
 let spotifySync = new SpotifySync(spotifyApi);
 spotifySync.fetch().then((songsList) => {
-  console.log('spotifySync.userId', spotifySync.userId);
-  PlaylistCreator.forEachArtist(
+  ArtistTopTrack.fromTracks(
     spotifyApi,
     spotifySync.userId,
     songsList.map((songItem: any, key: Number) => {
@@ -29,11 +28,3 @@ spotifySync.fetch().then((songsList) => {
     console.log('done !');
   }, (error) =>  { console.error(error) });
 }, (error) =>  { console.error(error) });
-
-
-// TODO
-//  - extract last saved songs
-//  - extract artists list
-//  - for each artist, return 5-10 songs, sort by popularity
-//  - group songs by "type"
-//  - create "n" playlists by "types"
