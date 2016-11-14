@@ -1,4 +1,4 @@
-# Expander
+# Expander [![Code Climate](https://codeclimate.com/github/thefrenchhouse/expander/badges/gpa.svg)](https://codeclimate.com/github/thefrenchhouse/expander)
 Music explorer, create playlists based on user saved songs (Spotify)
 
 Expander is an application that helps to discover songs from artists.
